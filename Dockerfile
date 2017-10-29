@@ -1,4 +1,5 @@
 FROM centos:6.8
+MAINTAINER Yves Schumann <y.schumann@yetnet.ch>
 
 RUN yum update -y \
  && yum upgrade -y \
