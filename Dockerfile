@@ -27,3 +27,15 @@ RUN yum install -y \
     php \
     php-mysql \
     php-soap
+
+RUN systemctl enable ntpd \
+ && systemctl enable vsftpd \
+ && systemctl enable httpd \
+ && systemctl enable mariadb
+
+RUN rm -f /etc/vsftpd/ftpusers \
+          /etc/vsftpd/user_list \
+ && sed -e "s/listen=.*$/listen=YES/g" \
+        -e "s/listen_ipv6=.*$/listen_ipv6=NO/g" \
+        -e "s/userlist_enable=.*/userlist_enable=NO/g" \
+        -i /etc/vsftpd/vsftpd.conf
