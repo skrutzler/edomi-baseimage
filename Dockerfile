@@ -36,4 +36,7 @@ RUN rm -f /etc/vsftpd/ftpusers \
  && sed -e "s/listen=.*$/listen=YES/g" \
         -e "s/listen_ipv6=.*$/listen_ipv6=NO/g" \
         -e "s/userlist_enable=.*/userlist_enable=NO/g" \
-        -i /etc/vsftpd/vsftpd.conf
+        -i /etc/vsftpd/vsftpd.conf \
+ && mv /usr/bin/systemctl /usr/bin/systemctl_ \
+ && wget https://raw.githubusercontent.com/starwarsfan/docker-systemctl-replacement/master/files/docker/systemctl.py -O /usr/bin/systemctl \
+ && chmod 755 /usr/bin/systemctl
