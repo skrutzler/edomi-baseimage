@@ -10,6 +10,7 @@ RUN yum update -y \
     git \
     httpd \
     mariadb-server \
+    mod_ssl \
     nano \
     ntp \
     openssh-server \
