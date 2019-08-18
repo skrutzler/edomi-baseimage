@@ -7,6 +7,7 @@ RUN yum update -y \
     https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm \
     http://rpms.remirepo.net/enterprise/remi-release-7.rpm \
  && yum install -y \
+    ca-certificates
     file \
     git \
     httpd \
