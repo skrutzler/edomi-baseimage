@@ -1,9 +1,7 @@
-FROM multiarch/qemu-user-static:x86_64-arm32v7 as builder
-
-FROM multiarch/centos:7.6.1810-armhfp-clean
+FROM arm32v7/centos:7
 MAINTAINER Yves Schumann <y.schumann@yetnet.ch>
 
-COPY --from=builder qemu-arm-static /usr/bin
+COPY qemu-arm-static /usr/bin
 
 RUN yum update -y \
  && yum upgrade -y
