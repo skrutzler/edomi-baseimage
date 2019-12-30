@@ -4,34 +4,36 @@ MAINTAINER Yves Schumann <y.schumann@yetnet.ch>
 RUN yum update -y \
  && yum upgrade -y \
  && yum install -y \
-    https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm \
-    http://rpms.remirepo.net/enterprise/remi-release-7.rpm \
+        ca-certificates \
+        epel-release \
+        file \
+        git \
+        httpd \
+        mariadb-server \
+        mod_ssl \
+        nano \
+        ntp \
+        openssh-server \
+        tar \
+        unzip \
+        vsftpd \
+        wget \
+        yum-utils \
  && yum install -y \
-    ca-certificates \
-    file \
-    git \
-    httpd \
-    mariadb-server \
-    mod_ssl \
-    nano \
-    ntp \
-    openssh-server \
-    tar \
-    unzip \
-    vsftpd \
-    wget \
-    yum-utils \
- && yum-config-manager --enable remi-php72 \
+        http://rpms.remirepo.net/enterprise/remi-release-7.rpm \
+ && yum-config-manager \
+        --enable remi-php73 \
  && yum install -y \
-    php \
-    php-gd \
-    php-mbstring \
-    php-mysql \
-    php-process \
-    php-soap \
-    php-xml \
- && yum clean all \
- && cd /tmp \
+        php \
+        php-gd \
+        php-mbstring \
+        php-mysql \
+        php-process \
+        php-soap \
+        php-xml \
+ && yum clean all
+
+RUN cd /tmp \
  && wget --no-check-certificate https://getcomposer.org/installer \
  && php installer \
  && mv composer.phar /usr/local/bin/composer \
