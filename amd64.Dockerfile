@@ -35,6 +35,7 @@ RUN yum update -y \
  && wget --no-check-certificate https://getcomposer.org/installer \
  && php installer \
  && mv composer.phar /usr/local/bin/composer \
+ && mkdir -p /usr/local/edomi/main/include/php \
  && cd /usr/local/edomi/main/include/php \
  && git clone https://github.com/php-telegram-bot/core \
  && mv core php-telegram-bot \
