@@ -25,9 +25,21 @@ RUN yum update -y \
  && yum install -y \
     php \
     php-gd \
+    php-mbstring \
     php-mysql \
+    php-process \
     php-soap \
- && yum clean all
+    php-xml \
+ && yum clean all \
+ && cd /tmp \
+ && wget --no-check-certificate https://getcomposer.org/installer \
+ && php installer \
+ && mv composer.phar /usr/local/bin/composer \
+ && cd /usr/local/edomi/main/include/php \
+ && git clone https://github.com/php-telegram-bot/core \
+ && mv core php-telegram-bot \
+ && cd php-telegram-bot \
+ && composer install
 
 RUN systemctl enable ntpd \
  && systemctl enable vsftpd \
