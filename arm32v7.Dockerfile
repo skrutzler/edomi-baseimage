@@ -25,17 +25,12 @@ RUN yum update -y \
         unzip \
         vsftpd \
         wget \
-        yum-utils 
+        yum-utils \
+ && yum clean all
 
 COPY epel.repo /etc/yum.repos.d/
 COPY php72-testing.repo /etc/yum.repos.d/
 COPY remi.repo /etc/yum.repos.d/
-
-#RUN yum install -y \
-#        https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm \
-#        http://rpms.remirepo.net/enterprise/remi-release-7.rpm \
-# && yum-config-manager \
-#        --enable remi-php73 \
 
 RUN yum install -y \
         php \
