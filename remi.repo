@@ -1,0 +1,6 @@
+[remi]
+name=Remi's RPM repository for Enterprise Linux 7 - $basearch
+mirrorlist=http://cdn.remirepo.net/enterprise/7/remi/mirror
+enabled=1
+gpgcheck=1
+gpgkey=https://rpms.remirepo.net/RPM-GPG-KEY-remi
