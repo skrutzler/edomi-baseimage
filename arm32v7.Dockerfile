@@ -15,6 +15,7 @@ RUN yum update -y \
         epel-release \
         file \
         git \
+        hostname \
         httpd \
         mariadb-server \
         mod_ssl \
