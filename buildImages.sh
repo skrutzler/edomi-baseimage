@@ -35,9 +35,20 @@ while getopts ph? option; do
     esac
 done
 
+docker build -f amd64.Builder.Dockerfile -t starwarsfan/edomi-baseimage-builder:amd64-latest .
+if ${PUBLISH_IMAGE} ; then
+    docker push starwarsfan/edomi-baseimage-builder:amd64-latest
+fi
+
 docker build -f amd64.Dockerfile -t starwarsfan/edomi-baseimage:amd64-latest .
 if ${PUBLISH_IMAGE} ; then
     docker push starwarsfan/edomi-baseimage:amd64-latest
+fi
+
+docker build -f arm32v7.Builder.Dockerfile -t starwarsfan/edomi-baseimage-builder:arm32v7-latest .
+if ${PUBLISH_IMAGE} ; then
+    echo "ARMv7 unsupported at the moment, no push to DockerHub :-/"
+#    docker push starwarsfan/edomi-baseimage-builder:arm32v7-latest
 fi
 
 docker build -f arm32v7.Dockerfile -t starwarsfan/edomi-baseimage:arm32v7-latest .

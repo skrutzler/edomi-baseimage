@@ -1,3 +1,15 @@
+FROM starwarsfan/edomi-baseimage-builder:amd64-latest as builder
+MAINTAINER Yves Schumann <y.schumann@yetnet.ch>
+RUN yum -y install mosquitto mosquitto-devel php-devel \
+ && cd /tmp \
+ && git clone https://github.com/mgdm/Mosquitto-PHP \
+ && cd Mosquitto-PHP \
+ && phpize \
+ && ./configure \
+ && make \
+ && checkinstall --install=no --default \
+ && cp Mosquitto-PHP-*.rpm /Mosquitto-PHP.rpm
+
 FROM centos:7
 MAINTAINER Yves Schumann <y.schumann@yetnet.ch>
 
@@ -59,3 +71,7 @@ RUN rm -f /etc/vsftpd/ftpusers \
  && mv /usr/bin/systemctl /usr/bin/systemctl_ \
  && wget https://raw.githubusercontent.com/starwarsfan/docker-systemctl-replacement/master/files/docker/systemctl.py -O /usr/bin/systemctl \
  && chmod 755 /usr/bin/systemctl
+
+COPY --from=builder /Mosquitto-PHP.rpm /
+RUN rpm -ivh /Mosquitto-PHP.rpm \
+ && echo 'extension=mosquitto.so' > /etc/php.d/50-mosquitto.ini \
