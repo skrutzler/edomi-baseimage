@@ -30,6 +30,7 @@ RUN yum update -y \
         httpd \
         mariadb-server \
         mod_ssl \
+        mosquitto \
         nano \
         ntp \
         openssh-server \
