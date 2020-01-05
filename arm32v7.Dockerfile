@@ -81,6 +81,6 @@ RUN rm -f /etc/vsftpd/ftpusers \
  && wget https://raw.githubusercontent.com/starwarsfan/docker-systemctl-replacement/master/files/docker/systemctl.py -O /usr/bin/systemctl \
  && chmod 755 /usr/bin/systemctl
 
-COPY --from=builder /tmp/Mosquitto-PHP /
+COPY --from=builder /tmp/Mosquitto-PHP/modules /usr/lib64/php/modules/
 RUN echo 'extension=mosquitto.so' > /etc/php.d/50-mosquitto.ini \
  && ls -la /
