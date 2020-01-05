@@ -82,5 +82,4 @@ RUN rm -f /etc/vsftpd/ftpusers \
  && chmod 755 /usr/bin/systemctl
 
 COPY --from=builder /tmp/Mosquitto-PHP/modules /usr/lib64/php/modules/
-RUN echo 'extension=mosquitto.so' > /etc/php.d/50-mosquitto.ini \
- && ls -la /
+RUN echo 'extension=mosquitto.so' > /etc/php.d/50-mosquitto.ini
