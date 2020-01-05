@@ -31,6 +31,7 @@ RUN yum update -y \
         php-process \
         php-soap \
         php-xml \
+        php-zip \
  && yum clean all
 
 RUN cd /tmp \
