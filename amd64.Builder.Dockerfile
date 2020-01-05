@@ -5,7 +5,6 @@ RUN yum update -y \
  && yum upgrade -y \
  && yum install -y \
         ca-certificates \
-        checkinstall \
         epel-release \
         file \
         gcc \
