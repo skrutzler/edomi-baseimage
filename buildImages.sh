@@ -35,13 +35,13 @@ while getopts ph? option; do
     esac
 done
 
-docker build -f amd64.Dockerfile -t starwarsfan/edomi-docker:amd64-latest .
+docker build -f amd64.Dockerfile -t starwarsfan/edomi-baseimage:amd64-latest .
 if ${PUBLISH_IMAGE} ; then
-    docker push starwarsfan/edomi-docker:amd64-latest
+    docker push starwarsfan/edomi-baseimage:amd64-latest
 fi
 
-docker build -f arm32v7.Dockerfile -t starwarsfan/edomi-docker:arm32v7-latest .
+docker build -f arm32v7.Dockerfile -t starwarsfan/edomi-baseimage:arm32v7-latest .
 if ${PUBLISH_IMAGE} ; then
     echo "Unsupported at the moment :-/"
-#    docker push starwarsfan/edomi-docker:arm32v7-latest
+#    docker push starwarsfan/edomi-baseimage:arm32v7-latest
 fi
