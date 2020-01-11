@@ -24,6 +24,7 @@ RUN yum update -y \
         mariadb-server \
         mod_ssl \
         mosquitto \
+        mosquitto-devel \
         nano \
         ntp \
         openssh-server \
