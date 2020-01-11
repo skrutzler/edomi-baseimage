@@ -15,8 +15,10 @@ MAINTAINER Yves Schumann <y.schumann@yetnet.ch>
 RUN yum update -y \
  && yum upgrade -y \
  && yum install -y \
-        ca-certificates \
         epel-release \
+ && yum update -y \
+ && yum install -y \
+        ca-certificates \
         file \
         git \
         hostname \
