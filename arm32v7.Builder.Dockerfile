@@ -25,3 +25,7 @@ RUN yum update -y \
         wget \
         yum-utils \
  && yum clean all
+
+COPY epel.repo /etc/yum.repos.d/
+COPY php72-testing.repo /etc/yum.repos.d/
+COPY remi.repo /etc/yum.repos.d/
