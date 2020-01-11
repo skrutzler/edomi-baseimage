@@ -22,8 +22,10 @@ RUN echo "armhfp" > /etc/yum/vars/basearch \
 RUN yum update -y \
  && yum upgrade -y \
  && yum install -y \
-        ca-certificates \
         epel-release \
+ && yum update -y \
+ && yum install -y \
+        ca-certificates \
         file \
         git \
         hostname \
@@ -75,6 +77,10 @@ RUN cd /usr/local/edomi/main/include/php/ \
  && cd PHPMailer \
  && composer require phpmailer/phpmailer
 
+# Mosquitto-LBS
+COPY --from=builder /tmp/Mosquitto-PHP/modules /usr/lib64/php/modules/
+RUN echo 'extension=mosquitto.so' > /etc/php.d/50-mosquitto.ini
+
 RUN systemctl enable ntpd \
  && systemctl enable vsftpd \
  && systemctl enable httpd \
@@ -90,5 +96,3 @@ RUN rm -f /etc/vsftpd/ftpusers \
  && wget https://raw.githubusercontent.com/starwarsfan/docker-systemctl-replacement/master/files/docker/systemctl.py -O /usr/bin/systemctl \
  && chmod 755 /usr/bin/systemctl
 
-COPY --from=builder /tmp/Mosquitto-PHP/modules /usr/lib64/php/modules/
-RUN echo 'extension=mosquitto.so' > /etc/php.d/50-mosquitto.ini
