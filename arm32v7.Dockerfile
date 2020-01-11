@@ -31,6 +31,7 @@ RUN yum update -y \
         mariadb-server \
         mod_ssl \
         mosquitto \
+        mosquitto-devel \
         nano \
         ntp \
         openssh-server \
@@ -56,6 +57,7 @@ RUN yum install -y \
         php-zip \
  && yum clean all
 
+# Telegram-LBS
 RUN cd /tmp \
  && wget --no-check-certificate https://getcomposer.org/installer \
  && php installer \
@@ -66,6 +68,12 @@ RUN cd /tmp \
  && mv core php-telegram-bot \
  && cd php-telegram-bot \
  && composer install
+
+# Mailer-LBS 19000587
+RUN cd /usr/local/edomi/main/include/php/ \
+ && mkdir PHPMailer \
+ && cd PHPMailer \
+ && composer require phpmailer/phpmailer
 
 RUN systemctl enable ntpd \
  && systemctl enable vsftpd \
