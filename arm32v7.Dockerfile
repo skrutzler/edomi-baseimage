@@ -81,6 +81,16 @@ RUN cd /usr/local/edomi/main/include/php/ \
 COPY --from=builder /tmp/Mosquitto-PHP/modules /usr/lib64/php/modules/
 RUN echo 'extension=mosquitto.so' > /etc/php.d/50-mosquitto.ini
 
+# MikroTik-LBS
+RUN yum -y update \
+        nss \
+ && yum clean all
+ && cd /usr/local/edomi/main/include/php \
+ && git clone https://github.com/jonofe/Net_RouterOS \
+ && cd Net_RouterOS \
+ && composer install
+
+# Edomi
 RUN systemctl enable ntpd \
  && systemctl enable vsftpd \
  && systemctl enable httpd \
@@ -96,3 +106,9 @@ RUN rm -f /etc/vsftpd/ftpusers \
  && wget https://raw.githubusercontent.com/starwarsfan/docker-systemctl-replacement/master/files/docker/systemctl.py -O /usr/bin/systemctl \
  && chmod 755 /usr/bin/systemctl
 
+# Remove limitation to only one installed language
+RUN sed "s/override_install_langs=.*$/override_install_langs=all/g" /etc/yum.conf \
+ && yum update -y \
+ && yum reinstall -y \
+        glibc-common \
+ && yum clean all
