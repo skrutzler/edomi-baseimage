@@ -84,7 +84,7 @@ RUN echo 'extension=mosquitto.so' > /etc/php.d/50-mosquitto.ini
 # MikroTik-LBS
 RUN yum -y update \
         nss \
- && yum clean all
+ && yum clean all \
  && cd /usr/local/edomi/main/include/php \
  && git clone https://github.com/jonofe/Net_RouterOS \
  && cd Net_RouterOS \
