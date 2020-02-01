@@ -98,7 +98,7 @@ RUN rm -f /etc/vsftpd/ftpusers \
  && chmod 755 /usr/bin/systemctl
 
 # Remove limitation to only one installed language
-RUN sed "s/override_install_langs=.*$/override_install_langs=all/g" /etc/yum.conf \
+RUN sed -i "s/override_install_langs=.*$/override_install_langs=all/g" /etc/yum.conf \
  && yum update -y \
  && yum reinstall -y \
         glibc-common \
