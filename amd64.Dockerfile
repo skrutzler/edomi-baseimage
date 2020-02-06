@@ -46,6 +46,7 @@ RUN yum update -y \
         php-mysql \
         php-process \
         php-soap \
+        php-ssh2 \
         php-xml \
         php-zip \
  && yum clean all
