@@ -28,6 +28,7 @@ RUN yum update -y \
         mosquitto \
         mosquitto-devel \
         nano \
+        net-tools \
         ntp \
         openssh-server \
         tar \
