@@ -42,6 +42,7 @@ RUN yum update -y \
         --enable remi-php72 \
  && yum install -y \
         php \
+        php-curl \
         php-gd \
         php-mbstring \
         php-mysql \
@@ -51,6 +52,13 @@ RUN yum update -y \
         php-xml \
         php-zip \
  && yum clean all
+
+# Alexa
+RUN ln -s /etc/pki/ca-trust/extracted/pem/tls-ca-bundle.pem /etc/pki/tls/cacert.pem \
+ && sed -i \
+        -e '/\[curl\]/ a curl.cainfo = /etc/pki/ca-trust/extracted/pem/tls-ca-bundle.pem' \
+        -e '/\[openssl\] a openssl.cafile = /etc/pki/ca-trust/extracted/pem/tls-ca-bundle.pem' \
+        /etc/php.ini
 
 # Telegram-LBS
 RUN cd /tmp \
