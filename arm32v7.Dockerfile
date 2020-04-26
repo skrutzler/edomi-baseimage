@@ -1,13 +1,31 @@
 FROM starwarsfan/edomi-baseimage-builder:arm32v7-latest as builder
 MAINTAINER Yves Schumann <y.schumann@yetnet.ch>
-RUN yum -y install mosquitto mosquitto-devel php-devel \
- && cd /tmp \
+
+# Dependencies to build stuff
+RUN yum -y install mosquitto mosquitto-devel mysql-devel php-devel
+
+# Now build
+RUN cd /tmp \
  && git clone https://github.com/mgdm/Mosquitto-PHP \
  && cd Mosquitto-PHP \
  && phpize \
  && ./configure \
  && make \
  && make install DESTDIR=/tmp/Mosquitto-PHP
+
+RUN cd /tmp \
+ && git clone https://github.com/jonofe/lib_mysqludf_sys \
+ && cd lib_mysqludf_sys/ \
+ && make \
+ && make install DESTDIR=/tmp/lib_mysqludf_sys
+
+RUN cd /tmp \
+ && git clone https://github.com/mysqludf/lib_mysqludf_log \
+ && cd lib_mysqludf_log \
+ && autoreconf -i \
+ && ./configure \
+ && make \
+ && make install DESTDIR=/tmp/lib_mysqludf_log
 
 FROM arm32v7/centos:7
 MAINTAINER Yves Schumann <y.schumann@yetnet.ch>
