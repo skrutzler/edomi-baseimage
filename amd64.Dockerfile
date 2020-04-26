@@ -16,7 +16,7 @@ RUN cd /tmp \
 RUN cd /tmp \
  && git clone https://github.com/jonofe/lib_mysqludf_sys \
  && cd lib_mysqludf_sys/ \
- && gcc -DMYSQL_DYNAMIC_PLUGIN -fPIC -Wall -I/usr/include/mysql -I. -shared lib_mysqludf_sys.c -o /tmp/Mosquitto-PHP
+ && gcc -DMYSQL_DYNAMIC_PLUGIN -fPIC -Wall -I/usr/include/mysql -I. -shared lib_mysqludf_sys.c -o /tmp/Mosquitto-PHP/usr/lib64/mysql/plugin/lib_mysqludf_sys.so
 
 RUN cd /tmp \
  && git clone https://github.com/mysqludf/lib_mysqludf_log \
