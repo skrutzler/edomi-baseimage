@@ -99,6 +99,7 @@ RUN cd /usr/local/edomi/main/include/php/ \
 # Mosquitto-LBS
 COPY --from=builder /tmp/Mosquitto-PHP/modules /usr/lib64/php/modules/
 COPY --from=builder /tmp/Mosquitto-PHP/usr/lib64/mysql /usr/lib64/mysql/
+COPY --from=builder /tmp/lib_mysqludf_sys/lib_mysqludf_sys.sql /root/
 RUN echo 'extension=mosquitto.so' > /etc/php.d/50-mosquitto.ini
 
 # MikroTik-LBS
