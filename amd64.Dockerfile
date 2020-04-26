@@ -2,7 +2,7 @@ FROM starwarsfan/edomi-baseimage-builder:amd64-latest as builder
 MAINTAINER Yves Schumann <y.schumann@yetnet.ch>
 
 # Dependencies to build stuff
-RUN yum -y install mosquitto mosquitto-devel mysql-devel php-devel
+RUN yum -y install mosquitto mosquitto-devel mysql-devel php-devel which
 
 # Now build
 RUN cd /tmp \
@@ -16,8 +16,7 @@ RUN cd /tmp \
 RUN cd /tmp \
  && git clone https://github.com/jonofe/lib_mysqludf_sys \
  && cd lib_mysqludf_sys/ \
- && make \
- && make install DESTDIR=/tmp/lib_mysqludf_sys
+ && gcc -DMYSQL_DYNAMIC_PLUGIN -fPIC -Wall -I/usr/include/mysql -I. -shared lib_mysqludf_sys.c -o /tmp/Mosquitto-PHP
 
 RUN cd /tmp \
  && git clone https://github.com/mysqludf/lib_mysqludf_log \
@@ -25,7 +24,7 @@ RUN cd /tmp \
  && autoreconf -i \
  && ./configure \
  && make \
- && make install DESTDIR=/tmp/lib_mysqludf_log
+ && make install DESTDIR=/tmp/Mosquitto-PHP
 
 FROM centos:7
 MAINTAINER Yves Schumann <y.schumann@yetnet.ch>
@@ -98,6 +97,7 @@ RUN cd /usr/local/edomi/main/include/php/ \
 
 # Mosquitto-LBS
 COPY --from=builder /tmp/Mosquitto-PHP/modules /usr/lib64/php/modules/
+COPY --from=builder /tmp/Mosquitto-PHP/usr/lib64/mysql /usr/lib64/mysql/
 RUN echo 'extension=mosquitto.so' > /etc/php.d/50-mosquitto.ini
 
 # MikroTik-LBS
