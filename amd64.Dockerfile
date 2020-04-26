@@ -14,7 +14,7 @@ RUN cd /tmp \
  && make install DESTDIR=/tmp/Mosquitto-PHP
 
 RUN cd /tmp \
- && mkdir -p /tmp/Mosquitto-PHP/usr/lib64/mysql/plugin
+ && mkdir -p /tmp/Mosquitto-PHP/usr/lib64/mysql/plugin \
  && git clone https://github.com/jonofe/lib_mysqludf_sys \
  && cd lib_mysqludf_sys/ \
  && gcc -DMYSQL_DYNAMIC_PLUGIN -fPIC -Wall -I/usr/include/mysql -I. -shared lib_mysqludf_sys.c -o /tmp/Mosquitto-PHP/usr/lib64/mysql/plugin/lib_mysqludf_sys.so
