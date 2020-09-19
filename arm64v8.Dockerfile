@@ -34,7 +34,7 @@ RUN yum -y install \
 # && make \
 # && make install DESTDIR=/tmp/Mosquitto-PHP
 
-FROM arm64v8/centos:7
+FROM arm64v8/centos:8
 MAINTAINER Yves Schumann <y.schumann@yetnet.ch>
 
 COPY qemu-aarch64-static /usr/bin/
@@ -46,6 +46,7 @@ RUN yum update -y \
  && yum update -y \
  && yum install -y \
         ca-certificates \
+        chrony \
         file \
         git \
         hostname \
@@ -54,7 +55,6 @@ RUN yum update -y \
         mod_ssl \
         nano \
         net-tools \
-        ntp \
         openssh-server \
         tar \
         unzip \
@@ -66,22 +66,23 @@ RUN yum update -y \
 #        mosquitto \
 #        mosquitto-devel \
 
-COPY epel.repo /etc/yum.repos.d/
-COPY php72-testing.repo /etc/yum.repos.d/
-COPY remi.repo /etc/yum.repos.d/
+#RUN yum install -y \
+#        https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
 
 RUN yum install -y \
         php \
         php-curl \
         php-gd \
+        php-json \
         php-mbstring \
-        php-mysql \
+        php-mysqlnd \
         php-process \
         php-soap \
-        php-ssh2 \
         php-xml \
         php-zip \
  && yum clean all
+# Not found on CentOS 8
+#        php-ssh2 \
 
 # Alexa
 RUN ln -s /etc/pki/ca-trust/extracted/pem/tls-ca-bundle.pem /etc/pki/tls/cacert.pem \
@@ -114,16 +115,14 @@ RUN cd /usr/local/edomi/main/include/php/ \
 #RUN echo 'extension=mosquitto.so' > /etc/php.d/50-mosquitto.ini
 
 # MikroTik-LBS
-RUN yum -y update \
-        nss \
- && yum clean all \
+RUN yum clean all \
  && cd /usr/local/edomi/main/include/php \
  && git clone https://github.com/jonofe/Net_RouterOS \
  && cd Net_RouterOS \
  && composer install
 
 # Edomi
-RUN systemctl enable ntpd \
+RUN systemctl enable chronyd \
  && systemctl enable vsftpd \
  && systemctl enable httpd \
  && systemctl enable mariadb
