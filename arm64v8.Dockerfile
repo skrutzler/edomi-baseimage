@@ -63,8 +63,8 @@ RUN yum update -y \
         yum-utils \
  && yum clean all
 # Mosquitto not available for arm64v8 :-(
-        mosquitto \
-        mosquitto-devel \
+#        mosquitto \
+#        mosquitto-devel \
 
 COPY epel.repo /etc/yum.repos.d/
 COPY php72-testing.repo /etc/yum.repos.d/
