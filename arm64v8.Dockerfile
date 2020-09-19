@@ -2,7 +2,12 @@ FROM starwarsfan/edomi-baseimage-builder:arm64v8-latest as builder
 MAINTAINER Yves Schumann <y.schumann@yetnet.ch>
 
 # Dependencies to build stuff
-RUN yum -y install mosquitto mosquitto-devel mysql-devel php-devel which
+RUN yum -y install \
+    mosquitto \
+    mosquitto-devel \
+    mysql-devel \
+    php-devel \
+    which
 
 # Now build
 RUN cd /tmp \
