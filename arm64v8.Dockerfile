@@ -27,15 +27,10 @@ RUN cd /tmp \
  && make \
  && make install DESTDIR=/tmp/Mosquitto-PHP
 
-FROM arm32v7/centos:7
+FROM arm64v8/centos:7
 MAINTAINER Yves Schumann <y.schumann@yetnet.ch>
 
-COPY qemu-arm-static /usr/bin/
-
-# Workaround for https://github.com/multiarch/centos/issues/1
-RUN echo "armhfp" > /etc/yum/vars/basearch \
- && echo "armv7hl" > /etc/yum/vars/arch \
- && echo "armv7hl-redhat-linux-gpu" > /etc/rpm/platform
+COPY qemu-aarch64-static /usr/bin/
 
 RUN yum update -y \
  && yum upgrade -y \
