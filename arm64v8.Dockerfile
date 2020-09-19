@@ -56,6 +56,8 @@ RUN yum update -y \
         nano \
         net-tools \
         openssh-server \
+        passwd \
+        python3 \
         tar \
         unzip \
         vsftpd \
@@ -135,7 +137,8 @@ RUN rm -f /etc/vsftpd/ftpusers \
         -i /etc/vsftpd/vsftpd.conf \
  && mv /usr/bin/systemctl /usr/bin/systemctl_ \
  && wget https://raw.githubusercontent.com/starwarsfan/docker-systemctl-replacement/master/files/docker/systemctl.py -O /usr/bin/systemctl \
- && chmod 755 /usr/bin/systemctl
+ && chmod 755 /usr/bin/systemctl \
+ && ln -s /usr/bin/python3 /usr/bin/python
 
 # Remove limitation to only one installed language
 RUN sed -i "s/override_install_langs=.*$/override_install_langs=all/g" /etc/yum.conf \
