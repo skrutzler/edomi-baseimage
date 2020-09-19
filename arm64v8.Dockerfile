@@ -2,35 +2,37 @@ FROM starwarsfan/edomi-baseimage-builder:arm64v8-latest as builder
 MAINTAINER Yves Schumann <y.schumann@yetnet.ch>
 
 # Dependencies to build stuff
+# Mosquitto not available for arm64v8 :-(
+#    mosquitto \
+#    mosquitto-devel \
 RUN yum -y install \
-    mosquitto \
-    mosquitto-devel \
     mysql-devel \
     php-devel \
     which
 
 # Now build
-RUN cd /tmp \
- && git clone https://github.com/mgdm/Mosquitto-PHP \
- && cd Mosquitto-PHP \
- && phpize \
- && ./configure \
- && make \
- && make install DESTDIR=/tmp/Mosquitto-PHP
-
-RUN cd /tmp \
- && mkdir -p /tmp/Mosquitto-PHP/usr/lib64/mysql/plugin \
- && git clone https://github.com/jonofe/lib_mysqludf_sys \
- && cd lib_mysqludf_sys/ \
- && gcc -DMYSQL_DYNAMIC_PLUGIN -fPIC -Wall -I/usr/include/mysql -I. -shared lib_mysqludf_sys.c -o /tmp/Mosquitto-PHP/usr/lib64/mysql/plugin/lib_mysqludf_sys.so
-
-RUN cd /tmp \
- && git clone https://github.com/mysqludf/lib_mysqludf_log \
- && cd lib_mysqludf_log \
- && autoreconf -i \
- && ./configure \
- && make \
- && make install DESTDIR=/tmp/Mosquitto-PHP
+# Mosquitto not available for arm64v8 :-(
+#RUN cd /tmp \
+# && git clone https://github.com/mgdm/Mosquitto-PHP \
+# && cd Mosquitto-PHP \
+# && phpize \
+# && ./configure \
+# && make \
+# && make install DESTDIR=/tmp/Mosquitto-PHP
+#
+#RUN cd /tmp \
+# && mkdir -p /tmp/Mosquitto-PHP/usr/lib64/mysql/plugin \
+# && git clone https://github.com/jonofe/lib_mysqludf_sys \
+# && cd lib_mysqludf_sys/ \
+# && gcc -DMYSQL_DYNAMIC_PLUGIN -fPIC -Wall -I/usr/include/mysql -I. -shared lib_mysqludf_sys.c -o /tmp/Mosquitto-PHP/usr/lib64/mysql/plugin/lib_mysqludf_sys.so
+#
+#RUN cd /tmp \
+# && git clone https://github.com/mysqludf/lib_mysqludf_log \
+# && cd lib_mysqludf_log \
+# && autoreconf -i \
+# && ./configure \
+# && make \
+# && make install DESTDIR=/tmp/Mosquitto-PHP
 
 FROM arm64v8/centos:7
 MAINTAINER Yves Schumann <y.schumann@yetnet.ch>
@@ -50,8 +52,6 @@ RUN yum update -y \
         httpd \
         mariadb-server \
         mod_ssl \
-        mosquitto \
-        mosquitto-devel \
         nano \
         net-tools \
         ntp \
@@ -62,6 +62,9 @@ RUN yum update -y \
         wget \
         yum-utils \
  && yum clean all
+# Mosquitto not available for arm64v8 :-(
+        mosquitto \
+        mosquitto-devel \
 
 COPY epel.repo /etc/yum.repos.d/
 COPY php72-testing.repo /etc/yum.repos.d/
@@ -106,8 +109,9 @@ RUN cd /usr/local/edomi/main/include/php/ \
  && composer require phpmailer/phpmailer
 
 # Mosquitto-LBS
-COPY --from=builder /tmp/Mosquitto-PHP/modules /usr/lib64/php/modules/
-RUN echo 'extension=mosquitto.so' > /etc/php.d/50-mosquitto.ini
+# Mosquitto not available for arm64v8 :-(
+#COPY --from=builder /tmp/Mosquitto-PHP/modules /usr/lib64/php/modules/
+#RUN echo 'extension=mosquitto.so' > /etc/php.d/50-mosquitto.ini
 
 # MikroTik-LBS
 RUN yum -y update \
