@@ -46,6 +46,7 @@ RUN yum update -y \
         mosquitto \
         mosquitto-devel \
         nano \
+        net-snmp-utils \
         net-tools \
         ntp \
         openssh-server \
@@ -66,6 +67,7 @@ RUN yum update -y \
         php-mysql \
         php-process \
         php-soap \
+        php-snmp \
         php-ssh2 \
         php-xml \
         php-zip \

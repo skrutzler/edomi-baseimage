@@ -54,6 +54,7 @@ RUN yum update -y \
         mariadb-server \
         mod_ssl \
         nano \
+        net-snmp-utils \
         net-tools \
         openssh-server \
         passwd \
@@ -79,6 +80,7 @@ RUN yum install -y \
         php-mbstring \
         php-mysqlnd \
         php-process \
+        php-snmp \
         php-soap \
         php-xml \
         php-zip \
