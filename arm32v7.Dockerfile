@@ -120,6 +120,12 @@ RUN yum -y update \
  && cd Net_RouterOS \
  && composer install
 
+# Philips HUE-LBS
+RUN cd /usr/local/edomi/main/include/php \
+ && git clone https://github.com/sqmk/Phue \
+ && cd Phue \
+ && composer install
+
 # Edomi
 RUN systemctl enable ntpd \
  && systemctl enable vsftpd \
