@@ -2,9 +2,14 @@ FROM starwarsfan/edomi-baseimage-builder:amd64-latest as builder
 MAINTAINER Yves Schumann <y.schumann@yetnet.ch>
 
 # Dependencies to build stuff
-RUN yum -y install mosquitto mosquitto-devel mysql-devel php-devel which
+RUN yum -y install \
+        mosquitto \
+        mosquitto-devel \
+        mysql-devel \
+        php-devel \
+        which
 
-# Now build
+# For 19001051 (MQTT Publish Server)
 RUN cd /tmp \
  && git clone https://github.com/mgdm/Mosquitto-PHP \
  && cd Mosquitto-PHP \
@@ -58,20 +63,23 @@ RUN yum update -y \
  && yum install -y \
         http://rpms.remirepo.net/enterprise/remi-release-7.rpm \
  && yum-config-manager \
-        --enable remi-php72 \
+        --enable remi-php74 \
  && yum install -y \
         php \
         php-curl \
         php-gd \
+        php-json \
         php-mbstring \
         php-mysql \
         php-process \
-        php-soap \
         php-snmp \
+        php-soap \
         php-ssh2 \
         php-xml \
         php-zip \
- && yum clean all
+ && yum clean all \
+ && rm -f /etc/vsftpd/ftpusers \
+          /etc/vsftpd/user_list
 
 # Alexa
 RUN ln -s /etc/pki/ca-trust/extracted/pem/tls-ca-bundle.pem /etc/pki/tls/cacert.pem \
@@ -80,13 +88,23 @@ RUN ln -s /etc/pki/ca-trust/extracted/pem/tls-ca-bundle.pem /etc/pki/tls/cacert.
         -e '/\[openssl\] a openssl.cafile = /etc/pki/ca-trust/extracted/pem/tls-ca-bundle.pem' \
         /etc/php.ini
 
-# Telegram-LBS
+# Mosquitto-LBS
+COPY --from=builder /tmp/Mosquitto-PHP/modules /usr/lib64/php/modules/
+COPY --from=builder /tmp/Mosquitto-PHP/usr/lib64/mysql /usr/lib64/mysql/
+COPY --from=builder /tmp/lib_mysqludf_log/installdb.sql /root/
+RUN echo 'extension=mosquitto.so' > /etc/php.d/50-mosquitto.ini
+
+# Get composer
 RUN cd /tmp \
- && wget --no-check-certificate https://getcomposer.org/installer \
- && php installer \
+ && php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');" \
+ && php -r "if (hash_file('sha384', 'composer-setup.php') === file_get_contents('https://composer.github.io/installer.sig')) { echo 'Installer verified'; } else { echo 'Installer corrupt'; unlink('composer-setup.php'); } echo PHP_EOL;" \
+ && php composer-setup.php \
+ && php -r "unlink('composer-setup.php');" \
  && mv composer.phar /usr/local/bin/composer \
- && mkdir -p /usr/local/edomi/main/include/php \
- && cd /usr/local/edomi/main/include/php \
+ && mkdir -p /usr/local/edomi/main/include/php
+
+# Telegram-LBS 19000303 / 19000304
+RUN cd /usr/local/edomi/main/include/php \
  && git clone https://github.com/php-telegram-bot/core \
  && mv core php-telegram-bot \
  && cd php-telegram-bot \
@@ -98,14 +116,8 @@ RUN cd /usr/local/edomi/main/include/php/ \
  && cd PHPMailer \
  && composer require phpmailer/phpmailer
 
-# Mosquitto-LBS
-COPY --from=builder /tmp/Mosquitto-PHP/modules /usr/lib64/php/modules/
-COPY --from=builder /tmp/Mosquitto-PHP/usr/lib64/mysql /usr/lib64/mysql/
-COPY --from=builder /tmp/lib_mysqludf_sys/lib_mysqludf_sys.sql /root/
-RUN echo 'extension=mosquitto.so' > /etc/php.d/50-mosquitto.ini
-
-# MikroTik-LBS
-RUN yum -y update \
+# MikroTik RouterOS API 19001059
+RUN yum update -y \
         nss \
  && yum clean all \
  && cd /usr/local/edomi/main/include/php \
@@ -113,10 +125,12 @@ RUN yum -y update \
  && cd Net_RouterOS \
  && composer install
 
-# Philips HUE-LBS
+# Philips HUE Bridge 19000195
+# As long as https://github.com/sqmk/Phue/pull/143 is not merged, fix phpunit via sed
 RUN cd /usr/local/edomi/main/include/php \
  && git clone https://github.com/sqmk/Phue \
  && cd Phue \
+ && sed -i "s/PHPUnit/phpunit/g" composer.json \
  && composer install
 
 # Edomi
@@ -125,9 +139,7 @@ RUN systemctl enable ntpd \
  && systemctl enable httpd \
  && systemctl enable mariadb
 
-RUN rm -f /etc/vsftpd/ftpusers \
-          /etc/vsftpd/user_list \
- && sed -e "s/listen=.*$/listen=YES/g" \
+RUN sed -e "s/listen=.*$/listen=YES/g" \
         -e "s/listen_ipv6=.*$/listen_ipv6=NO/g" \
         -e "s/userlist_enable=.*/userlist_enable=NO/g" \
         -i /etc/vsftpd/vsftpd.conf \

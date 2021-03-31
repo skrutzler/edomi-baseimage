@@ -1,5 +1,0 @@
-[php72-testing]
-name=Remi php72 rebuild for armhfp
-baseurl=https://armv7.dev.centos.org/repodir/community-php72-testing/
-enabled=1
-gpgcheck=0

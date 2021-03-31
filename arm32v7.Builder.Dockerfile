@@ -27,5 +27,5 @@ RUN yum update -y \
  && yum clean all
 
 COPY epel.repo /etc/yum.repos.d/
-COPY php72-testing.repo /etc/yum.repos.d/
+COPY php74-testing.repo /etc/yum.repos.d/
 COPY remi.repo /etc/yum.repos.d/
