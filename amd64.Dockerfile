@@ -42,6 +42,7 @@ RUN yum update -y \
  && yum update -y \
  && yum install -y \
         ca-certificates \
+        expect \
         file \
         git \
         hostname \
@@ -53,6 +54,7 @@ RUN yum update -y \
         nano \
         net-snmp-utils \
         net-tools \
+        nss \
         ntp \
         openssh-server \
         tar \
