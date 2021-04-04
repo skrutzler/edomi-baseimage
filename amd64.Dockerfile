@@ -114,10 +114,7 @@ RUN cd /usr/local/edomi/main/include/php \
  && chmod 777 -R .
 
 # MikroTik RouterOS API 19001059
-RUN yum update -y \
-        nss \
- && yum clean all \
- && cd /usr/local/edomi/main/include/php \
+RUN cd /usr/local/edomi/main/include/php \
  && git clone https://github.com/jonofe/Net_RouterOS \
  && cd Net_RouterOS \
  && composer install \
