@@ -45,6 +45,8 @@ RUN yum update -y \
  && yum install -y \
         ca-certificates \
         chrony \
+        dos2unix \
+        expect \
         file \
         git \
         hostname \
@@ -56,6 +58,8 @@ RUN yum update -y \
         nano \
         net-snmp-utils \
         net-tools \
+        nss \
+        oathtool \
         openssh-server \
         passwd \
         python3 \
@@ -114,22 +118,15 @@ RUN cd /usr/local/edomi/main/include/php \
  && git clone https://github.com/php-telegram-bot/core \
  && mv core php-telegram-bot \
  && cd php-telegram-bot \
- && composer install
-
-# Mailer-LBS 19000587
-RUN cd /usr/local/edomi/main/include/php/ \
- && mkdir PHPMailer \
- && cd PHPMailer \
- && composer require phpmailer/phpmailer
+ && composer install \
+ && chmod 777 -R .
 
 # MikroTik RouterOS API 19001059
-RUN yum update -y \
-        nss \
- && yum clean all \
- && cd /usr/local/edomi/main/include/php \
- && git clone https://github.com/jonofe/Net_RouterOS \
- && cd Net_RouterOS \
- && composer install
+#RUN cd /usr/local/edomi/main/include/php \
+# && git clone https://github.com/jonofe/Net_RouterOS \
+# && cd Net_RouterOS \
+# && composer install \
+# && chmod 777 -R .
 
 # Philips HUE Bridge 19000195
 # As long as https://github.com/sqmk/Phue/pull/143 is not merged, fix phpunit via sed
@@ -137,7 +134,15 @@ RUN cd /usr/local/edomi/main/include/php \
  && git clone https://github.com/sqmk/Phue \
  && cd Phue \
  && sed -i "s/PHPUnit/phpunit/g" composer.json \
- && composer install
+ && composer install \
+ && chmod 777 -R .
+
+# Mailer-LBS 19000587
+RUN cd /usr/local/edomi/main/include/php \
+ && mkdir PHPMailer \
+ && cd PHPMailer \
+ && composer require phpmailer/phpmailer \
+ && chmod 777 -R .
 
 # Edomi
 RUN systemctl enable chronyd \
