@@ -59,6 +59,7 @@ RUN yum update -y \
         ntp \
         oathtool \
         openssh-server \
+        openssl \
         tar \
         unzip \
         vsftpd \
@@ -137,6 +138,11 @@ RUN cd /usr/local/edomi/main/include/php \
  && cd PHPMailer \
  && composer require phpmailer/phpmailer \
  && chmod 777 -R .
+
+# Alexa Control 19000809
+RUN cd /etc/ssl/certs \
+ && wget https://curl.haxx.se/ca/cacert.pem -O /etc/ssl/certs/cacert-Mozilla.pem \
+ && echo "curl.cainfo=/etc/ssl/certs/cacert-Mozilla.pem" >> /etc/php.d/curl.ini
 
 # Edomi
 RUN systemctl enable ntpd \
