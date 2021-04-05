@@ -42,6 +42,7 @@ RUN yum update -y \
  && yum update -y \
  && yum install -y \
         ca-certificates \
+        dos2unix \
         expect \
         file \
         git \
