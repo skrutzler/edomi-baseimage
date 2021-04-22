@@ -22,7 +22,7 @@ RUN cd /tmp \
  && mkdir -p /tmp/Mosquitto-PHP/usr/lib64/mysql/plugin \
  && git clone https://github.com/jonofe/lib_mysqludf_sys \
  && cd lib_mysqludf_sys/ \
- && gcc -DMYSQL_DYNAMIC_PLUGIN -fPIC -Wall -I/usr/include/mysql -I. -shared lib_mysqludf_sys.c -o /tmp/Mosquitto-PHP/usr/lib64/mysql/plugin/lib_mysqludf_sys.so
+ && gcc -DMYSQL_DYNAMIC_PLUGIN -fPIC -Wall -I/usr/include/mysql/server -I/usr/include/mysql/server/private/ -I. -shared lib_mysqludf_sys.c -o /tmp/Mosquitto-PHP/usr/lib64/mysql/plugin/lib_mysqludf_sys.so
 
 RUN cd /tmp \
  && git clone https://github.com/mysqludf/lib_mysqludf_log \
@@ -115,12 +115,12 @@ RUN cd /tmp \
  && mkdir -p /usr/local/edomi/main/include/php
 
 # Telegram-LBS 19000303 / 19000304
-RUN cd /usr/local/edomi/main/include/php \
- && git clone https://github.com/php-telegram-bot/core \
- && mv core php-telegram-bot \
- && cd php-telegram-bot \
- && composer install \
- && chmod 777 -R .
+#RUN cd /usr/local/edomi/main/include/php \
+# && git clone https://github.com/php-telegram-bot/core \
+# && mv core php-telegram-bot \
+# && cd php-telegram-bot \
+# && composer install \
+# && chmod 777 -R .
 
 # MikroTik RouterOS API 19001059
 #RUN cd /usr/local/edomi/main/include/php \
